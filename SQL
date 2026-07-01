@@ -1,0 +1,301 @@
+Shell 9.7.1
+
+Copyright (c) 2016, 2026, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  SQL > \sql
+ MySQL  SQL > \c root@localhost
+Creating a session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 36
+Server version: 8.0.44 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > ^C
+ MySQL  localhost:3306 ssl  SQL > CREATE DATABASE CompanyDB;
+Query OK, 1 row affected (0.0241 sec)
+ MySQL  localhost:3306 ssl  SQL > USE CompanyDB;
+Default schema set to `CompanyDB`.
+Fetching global names, object names from `companydb` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  companydb  SQL > CREATE TABLE Departments (
+                                          ->     DeptID INT PRIMARY KEY,
+                                          ->     DeptName VARCHAR(50)
+                                          -> );
+Query OK, 0 rows affected (0.0768 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > CREATE TABLE Employees (
+                                          ->     EmpID INT PRIMARY KEY,
+                                          ->     EmpName VARCHAR(50),
+                                          ->     DeptID INT,
+                                          ->     Salary INT
+                                          -> );
+Query OK, 0 rows affected (0.0533 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > INSERT INTO Departments VALUES
+                                          -> (101,'Sales'),
+                                          -> (102,'HR'),
+                                          -> (103,'IT'),
+                                          -> (105,'Marketing');
+Query OK, 4 rows affected (0.0209 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > INSERT INTO Employees VALUES
+                                          -> (1,'Arun',101,45000),
+                                          -> (2,'Bhavya',102,55000),
+                                          -> (3,'Chitra',101,52000),
+                                          -> (4,'Dinesh',103,47000),
+                                          -> (5,'Esha',NULL,39000),
+                                          -> (6,'Farhan',104,41000);
+Query OK, 6 rows affected (0.0140 sec)
+
+Records: 6  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT * FROM Employees;
++-------+---------+--------+--------+
+| EmpID | EmpName | DeptID | Salary |
++-------+---------+--------+--------+
+|     1 | Arun    |    101 |  45000 |
+|     2 | Bhavya  |    102 |  55000 |
+|     3 | Chitra  |    101 |  52000 |
+|     4 | Dinesh  |    103 |  47000 |
+|     5 | Esha    |   NULL |  39000 |
+|     6 | Farhan  |    104 |  41000 |
++-------+---------+--------+--------+
+6 rows in set (0.0101 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT * FROM Departments;
++--------+-----------+
+| DeptID | DeptName  |
++--------+-----------+
+|    101 | Sales     |
+|    102 | HR        |
+|    103 | IT        |
+|    105 | Marketing |
++--------+-----------+
+4 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Employees e
+                                          -> INNER JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
++---------+----------+--------+
+4 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName,
+                                          ->        d.DeptName,
+                                          ->        e.Salary
+                                          -> FROM Employees e
+                                          -> INNER JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
++---------+----------+--------+
+4 rows in set (0.0077 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName,
+                                          ->        d.DeptName,
+                                          ->        e.Salary
+                                          -> FROM Employees e
+                                          -> LEFT JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
+| Esha    | NULL     |  39000 |
+| Farhan  | NULL     |  41000 |
++---------+----------+--------+
+6 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName,
+                                          ->        d.DeptName,
+                                          ->        e.Salary
+                                          -> FROM Employees e
+                                          -> RIGHT JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
++---------+-----------+--------+
+| EmpName | DeptName  | Salary |
++---------+-----------+--------+
+| Chitra  | Sales     |  52000 |
+| Arun    | Sales     |  45000 |
+| Bhavya  | HR        |  55000 |
+| Dinesh  | IT        |  47000 |
+| NULL    | Marketing |   NULL |
++---------+-----------+--------+
+5 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName,
+                                          ->        d.DeptName,
+                                          ->        e.Salary
+                                          -> FROM Employees e
+                                          -> FULL OUTER JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FULL OUTER JOIN Departments d
+ON e.DeptID = d.DeptID' at line 5
+ MySQL  localhost:3306 ssl  companydb  SQL > -- FULL OUTER JOIN in MySQL
+Query OK, 0 rows affected (0.0007 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Employees e
+                                          -> LEFT JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID
+                                          ->
+                                          -> UNION
+                                          ->
+                                          -> SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Employees e
+                                          -> RIGHT JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID;
++---------+-----------+--------+
+| EmpName | DeptName  | Salary |
++---------+-----------+--------+
+| Arun    | Sales     |  45000 |
+| Bhavya  | HR        |  55000 |
+| Chitra  | Sales     |  52000 |
+| Dinesh  | IT        |  47000 |
+| Esha    | NULL      |  39000 |
+| Farhan  | NULL      |  41000 |
+| NULL    | Marketing |   NULL |
++---------+-----------+--------+
+7 rows in set (0.0143 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.*
+                                          -> FROM Employees e
+                                          -> LEFT JOIN Departments d
+                                          -> ON e.DeptID = d.DeptID
+                                          -> WHERE d.DeptID IS NULL;
++-------+---------+--------+--------+
+| EmpID | EmpName | DeptID | Salary |
++-------+---------+--------+--------+
+|     5 | Esha    |   NULL |  39000 |
+|     6 | Farhan  |    104 |  41000 |
++-------+---------+--------+--------+
+2 rows in set (0.0091 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT d.*
+                                          -> FROM Departments d
+                                          -> LEFT JOIN Employees e
+                                          -> ON d.DeptID = e.DeptID
+                                          -> WHERE e.EmpID IS NULL;
++--------+-----------+
+| DeptID | DeptName  |
++--------+-----------+
+|    105 | Marketing |
++--------+-----------+
+1 row in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Employees e, Departments d
+                                          -> WHERE e.DeptID = d.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
++---------+----------+--------+
+4 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Employees e, Departments d
+                                          -> WHERE e.DeptID = d.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
++---------+----------+--------+
+4 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Departments d
+                                          -> RIGHT JOIN Employees e
+                                          -> ON d.DeptID = e.DeptID;
++---------+----------+--------+
+| EmpName | DeptName | Salary |
++---------+----------+--------+
+| Arun    | Sales    |  45000 |
+| Bhavya  | HR       |  55000 |
+| Chitra  | Sales    |  52000 |
+| Dinesh  | IT       |  47000 |
+| Esha    | NULL     |  39000 |
+| Farhan  | NULL     |  41000 |
++---------+----------+--------+
+6 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Departments d
+                                          -> LEFT JOIN Employees e
+                                          -> ON d.DeptID = e.DeptID;
++---------+-----------+--------+
+| EmpName | DeptName  | Salary |
++---------+-----------+--------+
+| Chitra  | Sales     |  52000 |
+| Arun    | Sales     |  45000 |
+| Bhavya  | HR        |  55000 |
+| Dinesh  | IT        |  47000 |
+| NULL    | Marketing |   NULL |
++---------+-----------+--------+
+5 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName, d.DeptName, e.Salary
+                                          -> FROM Departments d
+                                          -> LEFT JOIN Employees e
+                                          -> ON d.DeptID = e.DeptID;
++---------+-----------+--------+
+| EmpName | DeptName  | Salary |
++---------+-----------+--------+
+| Chitra  | Sales     |  52000 |
+| Arun    | Sales     |  45000 |
+| Bhavya  | HR        |  55000 |
+| Dinesh  | IT        |  47000 |
+| NULL    | Marketing |   NULL |
++---------+-----------+--------+
+5 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  companydb  SQL > ALTER TABLE Employees
+                                          -> ADD ManagerID INT;
+Query OK, 0 rows affected (0.0673 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = 2 WHERE EmpID = 1;
+Query OK, 1 row affected (0.0058 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = 4 WHERE EmpID = 2;
+Query OK, 1 row affected (0.0052 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = 2 WHERE EmpID = 3;
+Query OK, 1 row affected (0.0044 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = 6 WHERE EmpID = 4;
+Query OK, 1 row affected (0.0048 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = 4 WHERE EmpID = 5;
+Query OK, 1 row affected (0.0045 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > UPDATE Employees SET ManagerID = NULL WHERE EmpID = 6;
+Query OK, 0 rows affected (0.0011 sec)
+
+Rows matched: 1  Changed: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  companydb  SQL > SELECT e.EmpName AS Employee,
+                                          ->        m.EmpName AS Manager
+                                          -> FROM Employees e
+                                          -> LEFT JOIN Employees m
+                                          -> ON e.ManagerID = m.EmpID;
++----------+---------+
+| Employee | Manager |
++----------+---------+
+| Arun     | Bhavya  |
+| Bhavya   | Dinesh  |
+| Chitra   | Bhavya  |
+| Dinesh   | Farhan  |
+| Esha     | Dinesh  |
+| Farhan   | NULL    |
++----------+---------+
+6 rows in set (0.0016 sec)
